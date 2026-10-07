@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "author": "grivera",
   "license": "MIT",
-  "description": "Companion for the Kart Chaos browser racer: today's Daily Challenge and board, Time Trial records, open online rooms, and a nudge when someone beats your time",
+  "description": "Companion for Kart Chaos at kartchaos.com: today's Daily Challenge and leaderboard, Time Trial records, open online rooms, and alerts when someone beats your time",
   "kinds": [
     "service",
     "bar-widget"
