@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "grivera.kartchaos",
+  "name": "Kart Chaos",
+  "version": "1.0.0",
+  "author": "grivera",
+  "license": "MIT",
+  "description": "Companion for the Kart Chaos browser racer: today's Daily Challenge and board, Time Trial records, open online rooms, and a nudge when someone beats your time",
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Kart Chaos",
+    "description": "Daily Challenge, records and rooms for Kart Chaos",
+    "category": "Games",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Kart Chaos CLI (standard-library Python). `kartchaos status`, `kartchaos daily`.
+ROOT="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
+exec env PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/lib/kartchaos.py" "$@"
