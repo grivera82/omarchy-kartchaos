@@ -68,6 +68,10 @@ bin/kartchaos status     # today's challenge, your ranks, open rooms
 bin/kartchaos daily      # one line for scripts
 ```
 
+## Status for scripts and voice assistants
+
+`omarchy-shell grivera.kartchaos status` prints a JSON summary: today's Daily Challenge and its top times, your ranks, each track's lap record and the number of open rooms. Voice assistants such as [Jarvis](https://github.com/grivera82/omarchy-jarvis) use it to answer questions. It only reads, and works while the widget is in the bar.
+
 ## How it works
 
 The daemon (`lib/kartchaos.py`) polls the game server every three minutes, and right away when you open the panel. It sends the same one-off `daily` and `records` requests the game makes for its boards. The server doesn't say which track is today's daily, so the plugin runs the same seeded rotation as the game's `js/daily.js`. It re-reads that file and the track list from the site once a day, so new tracks show up without a plugin update.

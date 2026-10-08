@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
+import Quickshell.Io
 import qs.Ui
 import qs.Commons
 
@@ -11,6 +12,47 @@ Panel {
   id: root
   moduleName: "grivera.kartchaos"
   ipcTarget: "grivera.kartchaos"
+  manageIpc: false
+
+  // Panel commands plus status(), which voice assistants (Jarvis) and scripts
+  // read: `omarchy-shell grivera.kartchaos status`.
+  IpcHandler {
+    target: root.ipcTarget
+    function open(): void { root.open() }
+    function close(): void { root.close() }
+    function show(): void { root.open() }
+    function hide(): void { root.close() }
+    function toggle(): void { root.toggle() }
+    function status(): string { return JSON.stringify(root.statusSummary()) }
+  }
+
+  function statusTime(ts) { return ts ? Qt.formatDateTime(new Date(ts * 1000), "ddd MMM d, h:mm AP") : "" }
+
+  // Today's challenge, your ranks and the track records.
+  function statusSummary() {
+    if (!svc) return { error: "Kart Chaos isn't running" }
+    var s = svc.state || {}
+    function secs(t) { return t ? t.toFixed(3) + " s" : "" }
+    var o = { game: s.gameUrl || "https://kartchaos.com/" }
+    if (s.account) o.you = { name: s.account.name, racer: s.account.charName, linked: true }
+    else o.you = { linked: false }
+    var d = s.daily
+    if (d) {
+      o.dailyChallenge = { track: d.trackName, racer: d.charName, kart: d.kartName, engine: d.cc + "cc", laps: d.laps,
+                           resetsAt: root.statusTime(d.resetsAt / 1000), entries: d.count,
+                           top: (d.top || []).slice(0, 3).map(function(r) { return r.rank + ". " + r.name + " " + secs(r.time) }) }
+      if (d.me) o.dailyChallenge.yourRank = d.me.rank
+    }
+    o.tracks = (s.tracks || []).map(function(t) {
+      var mine = (t.laps || []).filter(function(r) { return r.mine })[0]
+      var x = { track: t.name, lapRecord: t.laps && t.laps[0] ? t.laps[0].name + " " + secs(t.laps[0].time) : "" }
+      if (mine) x.yourLapRank = mine.rank + " (" + secs(mine.time) + ")"
+      return x
+    })
+    o.openRooms = (s.rooms || []).length
+    return o
+  }
+
 
   readonly property var svc: root.bar && root.bar.shell ? root.bar.shell.serviceFor("grivera.kartchaos") : null
   readonly property var st: svc ? svc.state : ({})
